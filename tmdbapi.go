@@ -65,22 +65,22 @@ func getMovieId(arg string) (Movie, error) {
 	return searchResp.Results[0], nil
 }
 
-func GetCast(arg string) ([]Actor, error) {
+func GetCast(arg string) ([]Actor, string, error) {
 	movie, err := getMovieId(arg)
 	if err != nil {
-		return nil, fmt.Errorf("error fetching movie id: %w", err)
+		return nil, "", fmt.Errorf("error fetching movie id: %w", err)
 	}
 
 	url := fmt.Sprintf("%s/movie/%d/credits", baseURL, movie.ID)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
+		return nil, "", fmt.Errorf("error creating request: %w", err)
 	}
 
 	token, err := GetToken()
 	if err != nil {
-		return nil, fmt.Errorf("Error loading .env file")
+		return nil, "", fmt.Errorf("Error loading .env file")
 	}
 
 	req.Header.Add("accept", "application/json")
@@ -88,17 +88,17 @@ func GetCast(arg string) ([]Actor, error) {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, "", fmt.Errorf("error sending request: %w", err)
 	}
 
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with status: %d", res.StatusCode)
+		return nil, "", fmt.Errorf("request failed with status: %d", res.StatusCode)
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, fmt.Errorf("error reading response: %w", err)
+		return nil, "", fmt.Errorf("error reading response: %w", err)
 	}
 
 	var result struct {
@@ -107,10 +107,10 @@ func GetCast(arg string) ([]Actor, error) {
 
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, fmt.Errorf("Error parsing response: %w", err)
+		return nil, "", fmt.Errorf("Error parsing response: %w", err)
 	}
 
-	return result.Cast, nil
+	return result.Cast, movie.Title, nil
 }
 
 type Actor struct {

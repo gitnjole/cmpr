@@ -42,13 +42,13 @@ func main() {
 	arg1 := os.Args[1]
 	arg2 := os.Args[2]
 
-	cast1, err := GetCast(toURLFriendly(arg1))
+	cast1, movieTitle1, err := GetCast(toURLFriendly(arg1))
 	if err != nil {
 		fmt.Printf("Error fetching cast for `%s`: %s", arg1, err)
 		os.Exit(1)
 	}
 
-	cast2, err := GetCast(toURLFriendly(arg2))
+	cast2, movieTitle2, err := GetCast(toURLFriendly(arg2))
 	if err != nil {
 		fmt.Printf("Error fetching cast for `%s`: %s", arg2, err)
 		os.Exit(1)
@@ -64,8 +64,8 @@ func main() {
 	fmt.Printf("Common cast found: \n")
 	for _, actor := range commonCast {
 		fmt.Printf("\033[34m%s\033[0m\n", actor.Name)
-		fmt.Printf("as \033[34m%s\033[0m in \033[32m%s\033[0m\n", actor.CharacterMovie1, arg1)
-		fmt.Printf("as \033[34m%s\033[0m in \033[32m%s\033[0m\n", actor.CharacterMovie2, arg2)
+		fmt.Printf("as \033[34m%s\033[0m in \033[32m%s\033[0m\n", actor.CharacterMovie1, movieTitle1)
+		fmt.Printf("as \033[34m%s\033[0m in \033[32m%s\033[0m\n", actor.CharacterMovie2, movieTitle2)
 
 		fmt.Println(strings.Repeat("-", 62))
 	}
