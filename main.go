@@ -11,7 +11,7 @@ func toURLFriendly(movie string) string {
 	return url.QueryEscape(strings.ToLower(movie))
 }
 
-func findCommonCast(cast1, cast2 []Actor) []commonActors {
+func findCommonCast(cast1, cast2 []Actor) []CommonActors {
 	castMap := make(map[int]ActorInfo)
 	for _, actor := range cast1 {
 		castMap[actor.ID] = ActorInfo{
@@ -20,10 +20,10 @@ func findCommonCast(cast1, cast2 []Actor) []commonActors {
 		}
 	}
 
-	var common []commonActors
+	var common []CommonActors
 	for _, actor := range cast2 {
 		if info, found := castMap[actor.ID]; found {
-			common = append(common, commonActors{
+			common = append(common, CommonActors{
 				Name:            info.Name,
 				CharacterMovie1: info.Character,
 				CharacterMovie2: actor.Character,
@@ -76,7 +76,7 @@ type ActorInfo struct {
 	Character string
 }
 
-type commonActors struct {
+type CommonActors struct {
 	Name            string
 	CharacterMovie1 string
 	CharacterMovie2 string
