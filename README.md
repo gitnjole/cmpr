@@ -34,3 +34,8 @@ as Lois Byrd in Goodfellas
 -------------------------------------------------------------
 
 ```
+
+## TODO
+- tidy
+- add tv series
+- add init for token checking
